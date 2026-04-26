@@ -113,9 +113,7 @@ class ShopReview(models.Model):
     category = models.ForeignKey(ReviewCategory, on_delete=models.PROTECT)
     title = models.CharField(max_length=200, blank=True)
     body = models.TextField()
-    status = models.ForeignKey(
-        Status, on_delete=models.PROTECT, related_name="reviews"
-    )
+    status = models.ForeignKey(Status, on_delete=models.PROTECT, related_name="reviews")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

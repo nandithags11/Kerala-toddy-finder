@@ -7,7 +7,14 @@ from core.models import Status
 from shared.permissions import IsAdmin, IsShopOwner, IsShopOwnerOrAdmin
 from shared.responses import APIResponse
 
-from .models import ShopFoodItem, ShopLicense, ShopMedia, ShopRating, ShopReview, ToddyShop
+from .models import (
+    ShopFoodItem,
+    ShopLicense,
+    ShopMedia,
+    ShopRating,
+    ShopReview,
+    ToddyShop,
+)
 from .serializers import (
     ShopFoodItemSerializer,
     ShopLicenseSerializer,
@@ -18,7 +25,6 @@ from .serializers import (
     ToddyShopListSerializer,
     ToddyShopWriteSerializer,
 )
-
 
 # ---------------------------------------------------------------------------
 # ToddyShop
@@ -70,7 +76,9 @@ class ToddyShopViewSet(viewsets.ModelViewSet):
         qs = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(qs)
         if page is not None:
-            data = ToddyShopListSerializer(page, many=True, context={"request": request}).data
+            data = ToddyShopListSerializer(
+                page, many=True, context={"request": request}
+            ).data
             return self.get_paginated_response(data)
         data = ToddyShopListSerializer(qs, many=True, context={"request": request}).data
         return APIResponse(data=data, message="Shops retrieved successfully.")
@@ -206,9 +214,7 @@ class ShopFoodItemView(APIView):
 
     def get(self, request, shop_pk):
         shop = self._get_shop(shop_pk)
-        items = shop.shop_food_items.select_related(
-            "food_item__food_category"
-        ).all()
+        items = shop.shop_food_items.select_related("food_item__food_category").all()
         return APIResponse(
             data=ShopFoodItemSerializer(items, many=True).data,
             message="Food items retrieved.",
@@ -279,7 +285,9 @@ class ShopMediaView(APIView):
         shop = self._get_shop(shop_pk)
         media = shop.media.select_related("media_type", "uploaded_by").all()
         return APIResponse(
-            data=ShopMediaSerializer(media, many=True, context={"request": request}).data,
+            data=ShopMediaSerializer(
+                media, many=True, context={"request": request}
+            ).data,
             message="Media retrieved.",
         )
 
@@ -356,7 +364,9 @@ class ShopReviewView(APIView):
         serializer = ShopReviewSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(shop=shop, user=request.user, status=published)
-        return APIResponse(data=serializer.data, message="Review submitted.", status=201)
+        return APIResponse(
+            data=serializer.data, message="Review submitted.", status=201
+        )
 
 
 class ShopReviewDetailView(APIView):

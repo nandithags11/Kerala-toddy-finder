@@ -38,7 +38,6 @@ from .serializers import (
     UserSerializer,
 )
 
-
 # ---------------------------------------------------------------------------
 # Auth
 # ---------------------------------------------------------------------------
@@ -115,7 +114,9 @@ class LookupViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return APIResponse(data=serializer.data, message="Created successfully.", status=201)
+        return APIResponse(
+            data=serializer.data, message="Created successfully.", status=201
+        )
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)
